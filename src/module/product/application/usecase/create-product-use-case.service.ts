@@ -1,12 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { CreateProductDto } from './dto/create-product.dto';
-import { UpdateProductDto } from './dto/update-product.dto';
+import { CreateProductDto } from '../../adapter/controller/dto/create-product.dto';
+import { UpdateProductDto } from '../../adapter/controller/dto/update-product.dto';
 import {InjectModel} from "@nestjs/mongoose";
-import {Product} from "./entities/product.entity";
+import {Product} from "../../domain/product.entity";
 import {Model} from "mongoose";
+import {CreateProductCommand} from "../port/in/CreateProductCommand";
 
 @Injectable()
-export class ProductService {
+export class CreateProductUseCase implements CreateProductCommand {
   constructor(@InjectModel(Product.name) private readonly productModel: Model<Product>) {
   }
   create(createProductDto: CreateProductDto) {
