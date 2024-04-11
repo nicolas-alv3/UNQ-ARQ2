@@ -28,14 +28,25 @@
   - email
   - List of products
 - Product
+  - id
   - name
   - description
   - price
   - sku
   - sellerId
+- Item
+  - amount
+  - productId
 - Sale
+  - date
+  - List of Item
 
 ### Aggregates
 
 #### User aggregate
+Contains User and Seller entities
+
+#### Product aggregate
+
+Contains products, sale and Item entities
 

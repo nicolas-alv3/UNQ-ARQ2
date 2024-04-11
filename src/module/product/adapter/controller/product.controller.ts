@@ -1,34 +1,24 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { CreateProductUseCase } from '../../application/usecase/create-product-use-case.service';
-import { CreateProductDto } from './dto/create-product.dto';
-import { UpdateProductDto } from './dto/update-product.dto';
+import { Controller, Get, Inject } from '@nestjs/common';
+import { FindProductsQuery } from '../../application/port/in/FindProductsQuery';
+import { ProductRestResponseDto } from './dto/REST-response/product-rest-response.dto';
+import GenericMapper from '../../../utils/GenericMapper';
+import { Product } from '../../domain/product.entity';
 
 @Controller('products')
 export class ProductController {
-  constructor(private readonly productService: CreateProductUseCase) {}
-
-  @Post()
-  create(@Body() createProductDto: CreateProductDto) {
-    return this.productService.create(createProductDto);
+  constructor(
+    @Inject('FindProductsQuery') private findProductsQuery: FindProductsQuery,
+  ) {
   }
 
   @Get()
-  findAll() {
-    return this.productService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.productService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
-    return this.productService.update(+id, updateProductDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.productService.remove(+id);
+  async findAll(): Promise<ProductRestResponseDto[]> {
+    const response = await this.findProductsQuery.execute();
+    return response.map((p) => {
+      return GenericMapper.toClass<Product, ProductRestResponseDto>(
+        p,
+        new ProductRestResponseDto(),
+      );
+    });
   }
 }
