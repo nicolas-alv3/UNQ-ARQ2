@@ -4,6 +4,7 @@ export class ProductRestResponseDto {
   description: string;
   sku: string;
   sellerId: string;
+  category: string;
   id: string;
 
   constructor() {
@@ -13,5 +14,6 @@ export class ProductRestResponseDto {
     this.sku = '';
     this.sellerId = '';
     this.id = '';
+    this.category = '';
   }
 }

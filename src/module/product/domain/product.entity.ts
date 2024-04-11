@@ -3,6 +3,7 @@ export class Product {
     this.name = '';
     this.price = 0;
     this.description = '';
+    this.category = '';
     this.sku = '';
     this.sellerId = '';
     this.id = '';
@@ -14,4 +15,5 @@ export class Product {
   description: string;
   sku: string;
   sellerId: string;
+  category: string;
 }

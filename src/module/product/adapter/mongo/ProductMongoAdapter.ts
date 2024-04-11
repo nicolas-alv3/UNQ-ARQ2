@@ -4,6 +4,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Promise } from 'mongoose';
 import { query } from 'express';
+import { SearchCriteria } from '../../application/port/in/SearchProductsQuery';
 
 @Injectable()
 export default class ProductMongoAdapter implements ProductRepository {
@@ -19,11 +20,33 @@ export default class ProductMongoAdapter implements ProductRepository {
       sellerId: doc?.sellerId,
       sku: doc?.sku,
       description: doc?.description,
+      category: doc?.category,
     };
   }
 
   async findAll(): Promise<Product[]> {
     const query = this.productModel.find();
+    const result = await query.exec();
+    return result?.map(this.mapProduct);
+  }
+
+  async search(sc: SearchCriteria): Promise<Product[]> {
+    const query = this.productModel.find({
+      $and: [
+        // Filter by name or description
+        {
+          $or: [
+            sc.name ? { name: { $regex: sc.name, $options: 'i' } } : {},
+            sc.name ? { description: { $regex: sc.name, $options: 'i' } } : {},
+          ],
+        },
+        // Filter by category
+        sc.category ? { category: { $regex: sc.category, $options: 'i' } } : {},
+        // Filter by price
+        sc.priceLT ? { price: { $lt: sc.priceLT } } : {},
+        sc.priceGT ? { price: { $gt: sc.priceGT } } : {},
+      ],
+    });
     const result = await query.exec();
     return result?.map(this.mapProduct);
   }

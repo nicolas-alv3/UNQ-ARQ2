@@ -7,6 +7,7 @@ import { FindAllProductsUseCase } from './application/usecase/find-all-products-
 import ProductMongoAdapter from './adapter/mongo/ProductMongoAdapter';
 import { UpdateProductUseCase } from './application/usecase/update-product-use-case.service';
 import { DeleteProductUseCase } from './application/usecase/delete-product-use-case.service';
+import { SearchProductsUseCase } from './application/usecase/search-products-use-case.service';
 
 @Module({
   imports: [
@@ -18,6 +19,10 @@ import { DeleteProductUseCase } from './application/usecase/delete-product-use-c
     {
       provide: 'FindProductsQuery',
       useClass: FindAllProductsUseCase,
+    },
+    {
+      provide: 'SearchProductsQuery',
+      useClass: SearchProductsUseCase,
     },
     {
       provide: 'CreateProductCommand',

@@ -8,7 +8,9 @@ import {
   Param,
   Patch,
   Post,
+  Req,
 } from '@nestjs/common';
+import { Request } from 'express';
 import { FindProductsQuery } from '../../application/port/in/FindProductsQuery';
 import { ProductRestResponseDto } from './dto/REST-response/product-rest-response.dto';
 import GenericMapper from '../../../utils/GenericMapper';
@@ -17,11 +19,18 @@ import { ProductRequestDto } from './dto/REST-request/product-request.dto';
 import { CreateProductCommand } from '../../application/port/in/CreateProductCommand';
 import { UpdateProductCommand } from '../../application/port/in/UpdateProductCommand';
 import { DeleteProductCommand } from '../../application/port/in/DeleteProductCommand';
+import {
+  SearchCriteria,
+  SearchProductsQuery,
+} from '../../application/port/in/SearchProductsQuery';
 
 @Controller('products')
 export class ProductController {
   constructor(
-    @Inject('FindProductsQuery') private findProductsQuery: FindProductsQuery,
+    @Inject('FindProductsQuery')
+    private findProductsQuery: FindProductsQuery,
+    @Inject('SearchProductsQuery')
+    private searchProductsQuery: SearchProductsQuery,
     @Inject('CreateProductCommand')
     private createProductCommand: CreateProductCommand,
     @Inject('UpdateProductCommand')
@@ -29,6 +38,23 @@ export class ProductController {
     @Inject('DeleteProductCommand')
     private deleteProductCommand: DeleteProductCommand,
   ) {}
+
+  @Get('search')
+  async search(@Req() req: Request): Promise<ProductRestResponseDto[]> {
+    const sc: SearchCriteria = {
+      name: (req.query['name'] as string) || '',
+      category: (req.query['category'] as string) || '',
+      priceGT: (req.query['priceGT'] as unknown as number) || null,
+      priceLT: (req.query['priceLT'] as unknown as number) || null,
+    };
+    const response = await this.searchProductsQuery.execute(sc);
+    return response.map((p) => {
+      return GenericMapper.toClass<Product, ProductRestResponseDto>(
+        p,
+        new ProductRestResponseDto(),
+      );
+    });
+  }
 
   @Get()
   async findAll(): Promise<ProductRestResponseDto[]> {
