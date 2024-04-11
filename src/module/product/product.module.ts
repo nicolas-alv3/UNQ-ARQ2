@@ -5,7 +5,6 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ProductSchema } from './adapter/mongo/product.schema';
 import { FindAllProductsUseCase } from './application/usecase/find-all-products-use-case.service';
 import ProductMongoAdapter from './adapter/mongo/ProductMongoAdapter';
-import { FindProductsQuery } from './application/port/in/FindProductsQuery';
 
 @Module({
   imports: [
@@ -17,6 +16,10 @@ import { FindProductsQuery } from './application/port/in/FindProductsQuery';
     {
       provide: 'FindProductsQuery',
       useClass: FindAllProductsUseCase,
+    },
+    {
+      provide: 'CreateProductCommand',
+      useClass: CreateProductUseCase,
     },
     {
       provide: 'ProductRepository',
