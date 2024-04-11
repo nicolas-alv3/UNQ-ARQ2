@@ -25,12 +25,12 @@ export default class ProductMongoAdapter implements ProductRepository {
   async findAll(): Promise<Product[]> {
     const query = this.productModel.find();
     const result = await query.exec();
-    return result.map(this.mapProduct);
+    return result?.map(this.mapProduct);
   }
 
   async save(product: Product): Promise<Product> {
     const result = await this.productModel.create(product);
-    if (result.errors) {
+    if (result?.errors) {
       throw new BadRequestException('Invalid product data');
     }
     return this.mapProduct(result);
@@ -41,9 +41,22 @@ export default class ProductMongoAdapter implements ProductRepository {
       product.id,
       product,
     );
-    if (result.errors) {
+    if (result?.errors) {
       throw new BadRequestException('Invalid product data');
     }
     return { ...this.mapProduct(result), ...product };
+  }
+
+  async delete(id: string): Promise<boolean> {
+    let result;
+    try {
+      result = await this.productModel.findByIdAndDelete(id);
+    } catch (err) {
+      throw new BadRequestException('Invalid product ID');
+    }
+    if (result?.errors) {
+      throw new BadRequestException('Invalid product ID');
+    }
+    return Boolean(result?.name);
   }
 }

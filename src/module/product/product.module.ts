@@ -6,6 +6,7 @@ import { ProductSchema } from './adapter/mongo/product.schema';
 import { FindAllProductsUseCase } from './application/usecase/find-all-products-use-case.service';
 import ProductMongoAdapter from './adapter/mongo/ProductMongoAdapter';
 import { UpdateProductUseCase } from './application/usecase/update-product-use-case.service';
+import { DeleteProductUseCase } from './application/usecase/delete-product-use-case.service';
 
 @Module({
   imports: [
@@ -25,6 +26,10 @@ import { UpdateProductUseCase } from './application/usecase/update-product-use-c
     {
       provide: 'UpdateProductCommand',
       useClass: UpdateProductUseCase,
+    },
+    {
+      provide: 'DeleteProductCommand',
+      useClass: DeleteProductUseCase,
     },
     {
       provide: 'ProductRepository',

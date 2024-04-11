@@ -6,4 +6,6 @@ export interface ProductRepository {
   save(product: Product): Promise<Product>;
 
   update(product: Partial<Product>): Promise<Product>;
+
+  delete(id: string): Promise<boolean>;
 }

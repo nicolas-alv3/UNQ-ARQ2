@@ -2,8 +2,10 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Delete,
   Get,
   Inject,
+  Param,
   Patch,
   Post,
 } from '@nestjs/common';
@@ -14,6 +16,7 @@ import { Product } from '../../domain/product.entity';
 import { ProductRequestDto } from './dto/REST-request/product-request.dto';
 import { CreateProductCommand } from '../../application/port/in/CreateProductCommand';
 import { UpdateProductCommand } from '../../application/port/in/UpdateProductCommand';
+import { DeleteProductCommand } from '../../application/port/in/DeleteProductCommand';
 
 @Controller('products')
 export class ProductController {
@@ -23,6 +26,8 @@ export class ProductController {
     private createProductCommand: CreateProductCommand,
     @Inject('UpdateProductCommand')
     private updateProductCommand: UpdateProductCommand,
+    @Inject('DeleteProductCommand')
+    private deleteProductCommand: DeleteProductCommand,
   ) {}
 
   @Get()
@@ -69,5 +74,16 @@ export class ProductController {
       response,
       new ProductRestResponseDto(),
     );
+  }
+  @Delete(':id')
+  async delete(@Param('id') id: string): Promise<string> {
+    if (!id) {
+      throw new BadRequestException('Invalid product id');
+    }
+    const response = await this.deleteProductCommand.execute(id);
+    if (!response) {
+      throw new BadRequestException('Invalid product ID');
+    }
+    return 'Successfull delete of ' + id;
   }
 }
