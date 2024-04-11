@@ -2,8 +2,8 @@ import { ProductRepository } from '../../application/port/out/ProductRepository'
 import { Product } from '../../domain/product.entity';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import GenericMapper from '../../../utils/GenericMapper';
+import { Model, Promise } from 'mongoose';
+import { query } from 'express';
 
 @Injectable()
 export default class ProductMongoAdapter implements ProductRepository {
@@ -34,5 +34,16 @@ export default class ProductMongoAdapter implements ProductRepository {
       throw new BadRequestException('Invalid product data');
     }
     return this.mapProduct(result);
+  }
+
+  async update(product: Partial<Product>): Promise<Product> {
+    const result = await this.productModel.findByIdAndUpdate(
+      product.id,
+      product,
+    );
+    if (result.errors) {
+      throw new BadRequestException('Invalid product data');
+    }
+    return { ...this.mapProduct(result), ...product };
   }
 }
