@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Get,
   Inject,
   Post,
   Put,
@@ -12,15 +13,29 @@ import { UserRequestDTO } from './dto/UserRequestDTO';
 import { UserRestResponseDto } from './dto/UserRestResponseDto';
 import { User } from '../../domain/User';
 import { UpdateUserCommand } from '../../application/port/in/UpdateUserCommand';
+import { FindUsersCommand } from '../../application/port/in/FindUsersCommand';
 
 @Controller('users')
 export class UserController {
   constructor(
     @Inject('CreateUserCommand')
     private createUserCommand: CreateUserCommand,
+    @Inject('FindUsersCommand')
+    private findUsersCommand: FindUsersCommand,
     @Inject('UpdateUserCommand')
     private updateUserCommand: UpdateUserCommand,
   ) {}
+
+  @Get()
+  async getAll(): Promise<User[]> {
+    const response = await this.findUsersCommand.execute();
+    return response.map((u) =>
+      GenericMapper.toClass<User, UserRestResponseDto>(
+        u,
+        new UserRestResponseDto(),
+      ),
+    );
+  }
 
   @Post()
   async create(@Body() data: UserRequestDTO): Promise<UserRestResponseDto> {
