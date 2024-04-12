@@ -3,8 +3,8 @@ import {
   Body,
   Controller,
   Inject,
-  Patch,
   Post,
+  Put,
 } from '@nestjs/common';
 import { CreateUserCommand } from '../../application/port/in/CreateUserCommand';
 import GenericMapper from '../../../utils/GenericMapper';
@@ -36,7 +36,7 @@ export class UserController {
     );
   }
 
-  @Patch()
+  @Put()
   async update(
     @Body() data: Partial<UserRequestDTO>,
   ): Promise<UserRestResponseDto> {

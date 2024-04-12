@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { UserRepository } from '../port/out/UserRepository';
+import { UserRepository } from '../../application/port/out/UserRepository';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Promise } from 'mongoose';
 import { User } from '../../domain/User';
 
 @Injectable()
@@ -12,6 +12,7 @@ export default class UserMongoAdapter implements UserRepository {
 
   private mapUser(doc: any): User {
     return {
+      id: doc?.id as string,
       lastname: doc?.lastname,
       name: doc?.name,
       email: doc?.email,
@@ -51,6 +52,14 @@ export default class UserMongoAdapter implements UserRepository {
       throw new BadRequestException('Invalid user data');
     }
     return this.mapUser(result);
+  }
+
+  async update(user: Partial<User>): Promise<User> {
+    const result = await this.userModel.findByIdAndUpdate(user.id, user);
+    if (result?.errors) {
+      throw new BadRequestException('Invalid user data');
+    }
+    return { ...this.mapUser(result), ...user };
   }
 
   /*async update(product: Partial<Product>): Promise<Product> {

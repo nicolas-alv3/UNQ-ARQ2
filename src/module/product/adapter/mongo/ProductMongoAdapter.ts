@@ -3,7 +3,6 @@ import { Product } from '../../domain/product.entity';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Promise } from 'mongoose';
-import { query } from 'express';
 import { SearchCriteria } from '../../application/port/in/SearchProductsQuery';
 
 @Injectable()

@@ -1,5 +1,5 @@
 import { User } from '../../../domain/User';
 
-export interface CreateUserCommand {
+export interface UpdateUserCommand {
   execute(user: User);
 }
