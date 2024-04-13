@@ -11,6 +11,7 @@ import SellerMongoAdapter from './adapter/mongo/SellerMongoAdapter';
 import { FindSellersUsecase } from './application/usecase/find-sellers-usecase.service';
 import { SellerController } from './adapter/controller/seller.controller';
 import { CreateSellerUseCase } from './application/usecase/create-seller-usecase.service';
+import { UpdateSellerUseCase } from './application/usecase/update-seller-usecase.service';
 
 @Module({
   imports: [
@@ -24,7 +25,7 @@ import { CreateSellerUseCase } from './application/usecase/create-seller-usecase
     { provide: 'UpdateUserCommand', useClass: UpdateUserUseCase },
     { provide: 'CreateSellerCommand', useClass: CreateSellerUseCase },
     { provide: 'FindSellersCommand', useClass: FindSellersUsecase },
-    //{ provide: 'UpdateSellerCommand', useClass: UpdateSellerUseCase },
+    { provide: 'UpdateSellerCommand', useClass: UpdateSellerUseCase },
     {
       provide: 'UserRepository',
       useClass: UserMongoAdapter,

@@ -5,6 +5,7 @@ import {
   Get,
   Inject,
   Post,
+  Put,
 } from '@nestjs/common';
 import GenericMapper from 'src/module/utils/GenericMapper';
 import { Seller } from '../../domain/Seller';
@@ -12,6 +13,7 @@ import { SellerRestResponseDto } from './dto/SellerRestResponseDto';
 import { FindSellersQuery } from '../../application/port/in/FindSellersQuery';
 import { CreateSellerCommand } from '../../application/port/in/CreateSellerCommand';
 import { SellerRequestDTO } from './dto/SellerRequestDTO';
+import { UpdateSellerCommand } from '../../application/port/in/UpdateSellerCommand';
 
 @Controller('seller')
 export class SellerController {
@@ -20,8 +22,8 @@ export class SellerController {
     private createSellerCommand: CreateSellerCommand,
     @Inject('FindSellersCommand')
     private findSellersCommand: FindSellersQuery,
-    /*@Inject('UpdateSellerCommand')
-    private updateSellerCommand: UpdateSellerCommand,*/
+    @Inject('UpdateSellerCommand')
+    private updateSellerCommand: UpdateSellerCommand,
   ) {}
 
   @Get()
@@ -38,7 +40,7 @@ export class SellerController {
   @Post()
   async create(@Body() data: SellerRequestDTO): Promise<SellerRestResponseDto> {
     if (!data) {
-      throw new BadRequestException('Invalid user data');
+      throw new BadRequestException('Invalid seller data');
     }
     const response = await this.createSellerCommand.execute(
       GenericMapper.toClass<SellerRequestDTO, Seller>(data, new Seller()),
@@ -48,7 +50,6 @@ export class SellerController {
       new SellerRestResponseDto(),
     );
   }
-  /*
 
   @Put()
   async update(
@@ -67,5 +68,5 @@ export class SellerController {
       response,
       new SellerRestResponseDto(),
     );
-  }*/
+  }
 }

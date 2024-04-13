@@ -1,5 +1,5 @@
-import { User } from '../../../domain/User';
+import { Seller } from '../../../domain/Seller';
 
-export interface UpdateUserCommand {
-  execute(user: User);
+export interface UpdateSellerCommand {
+  execute(seller: Seller): Promise<Seller>;
 }
