@@ -1,5 +1,5 @@
 import { User } from '../../../domain/User';
 
-export interface FindUsersCommand {
+export interface FindUsersQuery {
   execute: () => Promise<User[]>;
 }

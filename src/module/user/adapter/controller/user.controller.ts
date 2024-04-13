@@ -13,7 +13,7 @@ import { UserRequestDTO } from './dto/UserRequestDTO';
 import { UserRestResponseDto } from './dto/UserRestResponseDto';
 import { User } from '../../domain/User';
 import { UpdateUserCommand } from '../../application/port/in/UpdateUserCommand';
-import { FindUsersCommand } from '../../application/port/in/FindUsersCommand';
+import { FindUsersQuery } from '../../application/port/in/FindUsersQuery';
 
 @Controller('users')
 export class UserController {
@@ -21,7 +21,7 @@ export class UserController {
     @Inject('CreateUserCommand')
     private createUserCommand: CreateUserCommand,
     @Inject('FindUsersCommand')
-    private findUsersCommand: FindUsersCommand,
+    private findUsersCommand: FindUsersQuery,
     @Inject('UpdateUserCommand')
     private updateUserCommand: UpdateUserCommand,
   ) {}

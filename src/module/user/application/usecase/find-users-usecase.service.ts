@@ -1,11 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { CreateUserCommand } from '../port/in/CreateUserCommand';
 import { UserRepository } from '../port/out/UserRepository';
 import { User } from '../../domain/User';
-import { FindUsersCommand } from '../port/in/FindUsersCommand';
+import { FindUsersQuery } from '../port/in/FindUsersQuery';
 
 @Injectable()
-export class FindUsersUsecase implements FindUsersCommand {
+export class FindUsersUsecase implements FindUsersQuery {
   constructor(
     @Inject('UserRepository')
     private readonly userRepository: UserRepository,
