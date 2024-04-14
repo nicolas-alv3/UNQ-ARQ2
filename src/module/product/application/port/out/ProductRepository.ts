@@ -11,4 +11,8 @@ export interface ProductRepository {
   delete(id: string): Promise<boolean>;
 
   search(sc: SearchCriteria): Promise<Product[]>;
+
+  findByIds(ids: string[]): Promise<Product[]>;
+
+  updateBatch(products: Product[]): Promise<Product[]>;
 }

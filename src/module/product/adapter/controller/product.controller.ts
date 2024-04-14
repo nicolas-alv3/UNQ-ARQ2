@@ -85,16 +85,13 @@ export class ProductController {
 
   @Patch()
   async update(
-    @Body() data: Partial<ProductRequestDto>,
+    @Body() data: ProductRequestDto,
   ): Promise<ProductRestResponseDto> {
     if (!data) {
       throw new BadRequestException('Invalid product data');
     }
     const response = await this.updateProductCommand.execute(
-      GenericMapper.toClass<Partial<ProductRequestDto>, Partial<Product>>(
-        data,
-        new Product(),
-      ),
+      GenericMapper.toClass<ProductRequestDto, Product>(data, new Product()),
     );
     return GenericMapper.toClass<Product, ProductRestResponseDto>(
       response,

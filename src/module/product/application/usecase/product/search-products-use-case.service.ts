@@ -1,11 +1,11 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { FindProductsQuery } from '../port/in/FindProductsQuery';
-import { Product } from '../../domain/product.entity';
-import { ProductRepository } from '../port/out/ProductRepository';
+import { FindProductsQuery } from '../../port/in/FindProductsQuery';
+import { Product } from '../../../domain/product.entity';
+import { ProductRepository } from '../../port/out/ProductRepository';
 import {
   SearchCriteria,
   SearchProductsQuery,
-} from '../port/in/SearchProductsQuery';
+} from '../../port/in/SearchProductsQuery';
 import { Promise } from 'mongoose';
 
 @Injectable()

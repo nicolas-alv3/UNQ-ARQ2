@@ -2,7 +2,7 @@ import { ProductRepository } from '../../application/port/out/ProductRepository'
 import { Product } from '../../domain/product.entity';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, Promise } from 'mongoose';
+import mongoose, { Model, Promise } from 'mongoose';
 import { SearchCriteria } from '../../application/port/in/SearchProductsQuery';
 
 @Injectable()
@@ -12,15 +12,15 @@ export default class ProductMongoAdapter implements ProductRepository {
   ) {}
 
   private mapProduct(doc: any): Product {
-    return {
-      id: doc?.id,
-      name: doc?.name,
-      price: doc?.price,
-      sellerId: doc?.sellerId,
-      sku: doc?.sku,
-      description: doc?.description,
-      category: doc?.category,
-    };
+    return new Product(
+      doc?.name,
+      doc?.price,
+      doc?.description,
+      doc?.category,
+      doc?.sku,
+      doc?.sellerId,
+      doc?.id,
+    );
   }
 
   async findAll(): Promise<Product[]> {
@@ -52,21 +52,18 @@ export default class ProductMongoAdapter implements ProductRepository {
 
   async save(product: Product): Promise<Product> {
     const result = await this.productModel.create(product);
-    if (result?.errors) {
+    /*if (result?.errors) {
       throw new BadRequestException('Invalid product data');
-    }
+    }*/
     return this.mapProduct(result);
   }
 
-  async update(product: Partial<Product>): Promise<Product> {
-    const result = await this.productModel.findByIdAndUpdate(
-      product.id,
-      product,
-    );
-    if (result?.errors) {
+  async update(product: Product): Promise<Product> {
+    await this.productModel.findByIdAndUpdate(product.getId(), product);
+    /*if (result?.errors) {
       throw new BadRequestException('Invalid product data');
-    }
-    return { ...this.mapProduct(result), ...product };
+    }*/
+    return product;
   }
 
   async delete(id: string): Promise<boolean> {
@@ -80,5 +77,28 @@ export default class ProductMongoAdapter implements ProductRepository {
       throw new BadRequestException('Invalid product ID');
     }
     return Boolean(result?.name);
+  }
+
+  async findByIds(ids: string[]): Promise<Product[]> {
+    const query = this.productModel.find().where('_id').in(ids);
+    const result = await query.exec();
+    return result?.map(this.mapProduct);
+  }
+
+  async updateBatch(products: Product[]): Promise<Product[]> {
+    const updateOperations = products.map((product) => ({
+      updateOne: {
+        filter: { _id: product.getId() },
+        update: { $set: product },
+      },
+    }));
+
+    const result = await this.productModel.bulkWrite(updateOperations);
+
+    if (result && result.errors) {
+      throw new BadRequestException('Invalid product data');
+    }
+
+    return products;
   }
 }
