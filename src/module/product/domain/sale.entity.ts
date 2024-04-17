@@ -1,19 +1,12 @@
 import { Item } from './item.entity';
-import { ValueObject } from '../../utils/ValueObject';
+import { SaleRecord } from './sale-record';
 
-interface SaleProps {
-  items: Item[];
-  date: Date;
-}
-
-export class Sale extends ValueObject<SaleProps> {
+export class Sale {
   items: Item[];
   date: Date;
 
   constructor(items: Item[]) {
-    const date = new Date();
-    super({ date, items });
-    this.date = date;
+    this.date = new Date();
     this.items = items;
   }
 
@@ -21,9 +14,11 @@ export class Sale extends ValueObject<SaleProps> {
     return this.items.reduce((sum, item) => sum + item.getPrice(), 0);
   }
 
-  process() {
+  process(): SaleRecord {
     this.items.forEach((item) => {
-      item.product.decreaseStock(1);
+      item.getProduct().decreaseStock(1);
     });
+
+    return new SaleRecord(this.items);
   }
 }

@@ -51,4 +51,13 @@ export class Product {
       this.sellerId,
     );
   }
+
+  toRecord() {
+    return new ProductRecord(
+      this.name,
+      this.price,
+      this.description,
+      this.category,
+    );
+  }
 }

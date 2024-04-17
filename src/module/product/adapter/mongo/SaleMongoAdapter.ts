@@ -3,7 +3,8 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model, Promise } from 'mongoose';
 import { SaleRepository } from '../../application/port/out/SaleRepository';
 import { Sale } from '../../domain/sale.entity';
-import { Item } from '../../domain/item.entity';
+import { SaleRecord } from '../../domain/sale-record';
+import { ItemRecord } from '../../domain/item-record';
 
 @Injectable()
 export default class SaleMongoAdapter implements SaleRepository {
@@ -11,22 +12,22 @@ export default class SaleMongoAdapter implements SaleRepository {
     @InjectModel(Sale.name) private readonly saleModel: Model<Sale>,
   ) {}
 
-  private mapItem(itemDoc: any): Item {
-    return new Item(itemDoc?.amount, itemDoc?.product);
+  private mapItem(itemDoc: any): ItemRecord {
+    return new ItemRecord(itemDoc?.amount, itemDoc?.product);
   }
 
-  private mapSale(doc: any): Sale {
-    return new Sale(doc?.items.map(this.mapItem));
+  private mapSale(doc: any): SaleRecord {
+    return new SaleRecord(doc?.items.map(this.mapItem));
   }
 
-  async findAll(): Promise<Sale[]> {
+  async findAll(): Promise<SaleRecord[]> {
     const query = this.saleModel.find();
     const result = await query.exec();
-    return result?.map(this.mapSale);
+    return result as unknown as SaleRecord[];
   }
 
-  async save(s: Sale): Promise<Sale> {
+  async save(s: SaleRecord): Promise<SaleRecord> {
     const result = await this.saleModel.create(s);
-    return this.mapSale(result);
+    return result as unknown as SaleRecord;
   }
 }

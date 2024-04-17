@@ -8,7 +8,7 @@ interface ProductCopyProps {
   category: string;
 }
 
-export class ProductRecord extends ValueObject<ProductCopyProps> {
+export class ProductRecord {
   private name: string;
   private price: number;
   private description: string;
@@ -21,7 +21,7 @@ export class ProductRecord extends ValueObject<ProductCopyProps> {
     category?: string,
     sellerId?: string,
   ) {
-    super({ name, price, description, sellerId, category });
+    //super({ name, price, description, sellerId, category });
     this.name = name || '';
     this.price = price || 0;
     this.description = description || '';

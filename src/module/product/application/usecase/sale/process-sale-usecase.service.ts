@@ -6,6 +6,7 @@ import { Item } from '../../../domain/item.entity';
 import { Product } from '../../../domain/product.entity';
 import { ItemRequestDto } from '../../../adapter/controller/dto/REST-request/item-request.dto';
 import { SaleRepository } from '../../port/out/SaleRepository';
+import { SaleRecord } from '../../../domain/sale-record';
 
 @Injectable()
 export class ProcessSaleUseCase implements ProcessSaleCommand {
@@ -16,7 +17,7 @@ export class ProcessSaleUseCase implements ProcessSaleCommand {
     private readonly saleRepository: SaleRepository,
   ) {}
 
-  async execute(items: ItemRequestDto[]): Promise<Sale> {
+  async execute(items: ItemRequestDto[]): Promise<SaleRecord> {
     let products: Product[];
     try {
       products = await this.productRepository.findByIds(
@@ -38,13 +39,13 @@ export class ProcessSaleUseCase implements ProcessSaleCommand {
       ),
     );
 
-    sale.process();
+    const record = sale.process();
 
     products = await this.productRepository.updateBatch(
-      sale.items.map((i) => i.product),
+      sale.items.map((i) => i.getProduct()),
     );
 
-    this.saleRepository.save(sale);
-    return sale;
+    await this.saleRepository.save(record);
+    return record;
   }
 }

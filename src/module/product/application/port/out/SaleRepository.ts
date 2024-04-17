@@ -1,7 +1,7 @@
-import { Sale } from '../../../domain/sale.entity';
+import { SaleRecord } from '../../../domain/sale-record';
 
 export interface SaleRepository {
-  findAll(): Promise<Sale[]>;
+  findAll(): Promise<SaleRecord[]>;
 
-  save(s: Sale): Promise<Sale>;
+  save(s: SaleRecord): Promise<SaleRecord>;
 }
