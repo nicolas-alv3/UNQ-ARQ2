@@ -37,6 +37,6 @@ describe('Sale price', () => {
     const computerItem = new Item(1, computer);
     const sale = new Sale([computerItem]);
     sale.process();
-    expect(computerItem.product.getStock()).toBe(19);
+    expect(computerItem.getProduct().getStock()).toBe(19);
   });
 });
