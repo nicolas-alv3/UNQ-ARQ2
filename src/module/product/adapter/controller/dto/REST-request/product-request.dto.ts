@@ -3,6 +3,6 @@ export class ProductRequestDto {
   price: number;
   description: string;
   category: string;
-  sku: string;
+  stock: number;
   sellerId: string;
 }

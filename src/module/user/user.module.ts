@@ -12,6 +12,7 @@ import { FindSellersUsecase } from './application/usecase/find-sellers-usecase.s
 import { SellerController } from './adapter/controller/seller.controller';
 import { CreateSellerUseCase } from './application/usecase/create-seller-usecase.service';
 import { UpdateSellerUseCase } from './application/usecase/update-seller-usecase.service';
+import { SaleSchema } from '../product/adapter/mongo/sale.schema';
 
 @Module({
   imports: [

@@ -1,9 +1,11 @@
+import { ProductRecord } from './product-record';
+
 export class Product {
   private name: string;
   private price: number;
   private id: string;
   private description: string;
-  private sku: number;
+  private stock: number;
   private sellerId: string;
   private category: string;
   constructor(
@@ -11,7 +13,7 @@ export class Product {
     price?: number,
     description?: string,
     category?: string,
-    sku?: number,
+    stock?: number,
     sellerId?: string,
     id?: string,
   ) {
@@ -19,13 +21,13 @@ export class Product {
     this.price = price || 0;
     this.description = description || '';
     this.category = category || '';
-    this.sku = sku || 0;
+    this.stock = stock || 0;
     this.sellerId = sellerId || '';
     this.id = id || '';
   }
 
-  decreaseSku(number: number) {
-    this.sku -= number;
+  decreaseStock(number: number) {
+    this.stock -= number;
   }
 
   getPrice() {
@@ -34,5 +36,19 @@ export class Product {
 
   getId() {
     return this.id;
+  }
+
+  getStock() {
+    return this.stock;
+  }
+
+  copy(): ProductRecord {
+    return new ProductRecord(
+      this.name,
+      this.price,
+      this.description,
+      this.category,
+      this.sellerId,
+    );
   }
 }

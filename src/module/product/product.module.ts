@@ -10,10 +10,13 @@ import { DeleteProductUseCase } from './application/usecase/product/delete-produ
 import { SearchProductsUseCase } from './application/usecase/product/search-products-use-case.service';
 import { SaleController } from './adapter/controller/sale.controller';
 import { ProcessSaleUseCase } from './application/usecase/sale/process-sale-usecase.service';
+import SaleMongoAdapter from './adapter/mongo/SaleMongoAdapter';
+import { SaleSchema } from './adapter/mongo/sale.schema';
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: 'Product', schema: ProductSchema }]),
+    MongooseModule.forFeature([{ name: 'Sale', schema: SaleSchema }]),
   ],
   controllers: [ProductController, SaleController],
   providers: [
@@ -44,6 +47,10 @@ import { ProcessSaleUseCase } from './application/usecase/sale/process-sale-usec
     {
       provide: 'ProductRepository',
       useClass: ProductMongoAdapter,
+    },
+    {
+      provide: 'SaleRepository',
+      useClass: SaleMongoAdapter,
     },
     ProductMongoAdapter,
   ],

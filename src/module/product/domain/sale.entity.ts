@@ -1,10 +1,19 @@
 import { Item } from './item.entity';
+import { ValueObject } from '../../utils/ValueObject';
 
-export class Sale {
+interface SaleProps {
   items: Item[];
   date: Date;
+}
+
+export class Sale extends ValueObject<SaleProps> {
+  items: Item[];
+  date: Date;
+
   constructor(items: Item[]) {
-    this.date = new Date();
+    const date = new Date();
+    super({ date, items });
+    this.date = date;
     this.items = items;
   }
 
@@ -14,7 +23,7 @@ export class Sale {
 
   process() {
     this.items.forEach((item) => {
-      item.product.decreaseSku(1);
+      item.product.decreaseStock(1);
     });
   }
 }

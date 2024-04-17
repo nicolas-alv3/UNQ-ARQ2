@@ -32,11 +32,11 @@ describe('Sale price', () => {
     expect(sale.getPrice()).toBe(15);
   });
 
-  test('with one computer the sku decreases in one', () => {
+  test('with one computer the stock decreases in one', () => {
     const computer = new Product('Computer', 10, '', 'no', 20);
     const computerItem = new Item(1, computer);
     const sale = new Sale([computerItem]);
     sale.process();
-    expect(computerItem.product.sku).toBe(19);
+    expect(computerItem.product.getStock()).toBe(19);
   });
 });

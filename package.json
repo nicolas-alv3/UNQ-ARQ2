@@ -29,7 +29,8 @@
     "dotenv": "^16.4.5",
     "mongoose": "^8.2.2",
     "reflect-metadata": "^0.2.0",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.1",
+    "shallow-equal-object": "^1.1.1"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",

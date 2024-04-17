@@ -2,7 +2,7 @@ export class ProductRestResponseDto {
   name: string;
   price: number;
   description: string;
-  sku: string;
+  stock: number;
   sellerId: string;
   category: string;
   id: string;
@@ -11,7 +11,7 @@ export class ProductRestResponseDto {
     this.name = '';
     this.price = 0;
     this.description = '';
-    this.sku = '';
+    this.stock = 0;
     this.sellerId = '';
     this.id = '';
     this.category = '';

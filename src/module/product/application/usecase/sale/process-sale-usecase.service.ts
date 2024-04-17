@@ -5,12 +5,15 @@ import { Sale } from '../../../domain/sale.entity';
 import { Item } from '../../../domain/item.entity';
 import { Product } from '../../../domain/product.entity';
 import { ItemRequestDto } from '../../../adapter/controller/dto/REST-request/item-request.dto';
+import { SaleRepository } from '../../port/out/SaleRepository';
 
 @Injectable()
 export class ProcessSaleUseCase implements ProcessSaleCommand {
   constructor(
     @Inject('ProductRepository')
     private readonly productRepository: ProductRepository,
+    @Inject('SaleRepository')
+    private readonly saleRepository: SaleRepository,
   ) {}
 
   async execute(items: ItemRequestDto[]): Promise<Sale> {
@@ -40,6 +43,8 @@ export class ProcessSaleUseCase implements ProcessSaleCommand {
     products = await this.productRepository.updateBatch(
       sale.items.map((i) => i.product),
     );
+
+    this.saleRepository.save(sale);
     return sale;
   }
 }

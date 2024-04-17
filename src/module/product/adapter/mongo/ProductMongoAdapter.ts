@@ -17,7 +17,7 @@ export default class ProductMongoAdapter implements ProductRepository {
       doc?.price,
       doc?.description,
       doc?.category,
-      doc?.sku,
+      doc?.stock,
       doc?.sellerId,
       doc?.id,
     );

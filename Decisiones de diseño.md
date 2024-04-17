@@ -32,11 +32,11 @@
   - name
   - description
   - price
-  - sku
+  - stock
   - sellerId
 - Item
   - amount
-  - productId
+  - product
 - Sale
   - date
   - List of Item
@@ -44,9 +44,8 @@
 ### Aggregates
 
 #### User aggregate
-Contains User and Seller entities
+Contains User(Root aggregate) and Seller entities
 
 #### Product aggregate
 
-Contains products, sale and Item entities
-
+Contains products(Root aggregate), sale and Item entities
