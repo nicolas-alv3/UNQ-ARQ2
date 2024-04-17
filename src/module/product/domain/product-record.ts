@@ -1,13 +1,3 @@
-import { ValueObject } from '../../utils/ValueObject';
-
-interface ProductCopyProps {
-  name: string;
-  price: number;
-  description: string;
-  sellerId: string;
-  category: string;
-}
-
 export class ProductRecord {
   private name: string;
   private price: number;

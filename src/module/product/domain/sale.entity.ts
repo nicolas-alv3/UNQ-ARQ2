@@ -16,7 +16,7 @@ export class Sale {
 
   process(): SaleRecord {
     this.items.forEach((item) => {
-      item.getProduct().decreaseStock(1);
+      item.getProduct().decreaseStock(item.getAmount());
     });
 
     return new SaleRecord(this.items);
