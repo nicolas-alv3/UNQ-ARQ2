@@ -11,7 +11,6 @@ export class ProductRecord {
     category?: string,
     sellerId?: string,
   ) {
-    //super({ name, price, description, sellerId, category });
     this.name = name || '';
     this.price = price || 0;
     this.description = description || '';
