@@ -1,3 +1,8 @@
 export interface ExternalUserRepository {
-  existUserById(id: string): Promise<boolean>;
+  getUserById(id: string): Promise<UserData>;
+}
+
+export interface UserData {
+  name: string;
+  email: string;
 }

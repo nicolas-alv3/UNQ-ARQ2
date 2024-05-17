@@ -4,12 +4,14 @@ import { ProcessSaleCommand } from '../../port/in/ProcessSaleCommand';
 import { Sale } from '../../../domain/sale.entity';
 import { Item } from '../../../domain/item.entity';
 import { Product } from '../../../domain/product.entity';
-import { ItemRequestDto } from '../../../adapter/controller/dto/REST-request/item-request.dto';
 import { SaleRepository } from '../../port/out/SaleRepository';
 import { SaleRecord } from '../../../domain/sale-record';
 import { SaleRequestDto } from '../../../adapter/controller/dto/REST-request/sale-request.dto';
-import { ExternalUserRepository } from '../../port/out/ExternalUserRepository';
-
+import {
+  ExternalUserRepository,
+  UserData,
+} from '../../port/out/ExternalUserRepository';
+import { NotificationDomainService } from '../../port/out/NotificationDomainService';
 @Injectable()
 export class ProcessSaleUseCase implements ProcessSaleCommand {
   constructor(
@@ -19,12 +21,14 @@ export class ProcessSaleUseCase implements ProcessSaleCommand {
     private readonly saleRepository: SaleRepository,
     @Inject('ExternalUserRepository')
     private readonly userRepository: ExternalUserRepository,
+    @Inject('NotificationDomainService')
+    private readonly notificationDomainService: NotificationDomainService,
   ) {}
 
   async execute(s: SaleRequestDto): Promise<SaleRecord> {
     let products: Product[];
     products = await this.getProducts(s);
-    await this.checkIfUserExists(s.userId);
+    const userData = await this.getUserData(s.userId);
     const sale = new Sale(
       s.items.map(
         (i) =>
@@ -41,7 +45,9 @@ export class ProcessSaleUseCase implements ProcessSaleCommand {
     products = await this.productRepository.updateBatch(
       sale.getItems().map((i) => i.getProduct()),
     );
-
+    this.notificationDomainService
+      .sendSaleNotification(record, userData)
+      .subscribe(() => console.log('Email sent successfully'));
     await this.saleRepository.save(record);
     return record;
   }
@@ -59,20 +65,22 @@ export class ProcessSaleUseCase implements ProcessSaleCommand {
     }
   }
 
-  private async checkIfUserExists(userId: string) {
+  private async getUserData(userId: string): Promise<UserData> {
     try {
-      const exist = await this.userRepository.existUserById(userId);
-      if (!exist) {
-        throw new HttpException(
-          { message: 'User does not exist' },
-          HttpStatus.BAD_REQUEST,
-        );
+      const user = await this.userRepository.getUserById(userId);
+      if (!user) {
+        this.throwUserNotExist();
       }
+      return user;
     } catch (e) {
-      throw new HttpException(
-        { message: 'User does not exist' },
-        HttpStatus.BAD_REQUEST,
-      );
+      this.throwUserNotExist();
     }
+  }
+
+  private throwUserNotExist() {
+    throw new HttpException(
+      { message: 'User does not exist' },
+      HttpStatus.BAD_REQUEST,
+    );
   }
 }

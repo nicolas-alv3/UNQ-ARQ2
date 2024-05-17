@@ -13,8 +13,9 @@ import { ProcessSaleUseCase } from './application/usecase/sale/process-sale-usec
 import SaleMongoAdapter from './adapter/mongo/SaleMongoAdapter';
 import { SaleSchema } from './adapter/mongo/sale.schema';
 import { HttpModule } from '@nestjs/axios';
-import ExternalSellerHTTPAdapter from './adapter/mongo/ExternalSellerHTTPAdapter';
-import ExternalUserHTTPAdapter from './adapter/mongo/ExternalUserHTTPAdapter';
+import ExternalSellerHTTPAdapter from './adapter/external/ExternalSellerHTTPAdapter';
+import ExternalUserHTTPAdapter from './adapter/external/ExternalUserHTTPAdapter';
+import ExternalNotificationHTTPAdapter from './adapter/external/ExternaNotificationHTTPAdapter';
 
 @Module({
   imports: [
@@ -63,6 +64,10 @@ import ExternalUserHTTPAdapter from './adapter/mongo/ExternalUserHTTPAdapter';
     {
       provide: 'ExternalUserRepository',
       useClass: ExternalUserHTTPAdapter,
+    },
+    {
+      provide: 'NotificationDomainService',
+      useClass: ExternalNotificationHTTPAdapter,
     },
     ProductMongoAdapter,
   ],
