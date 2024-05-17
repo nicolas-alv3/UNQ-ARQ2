@@ -1,7 +1,7 @@
 {
-  "name": "moli",
-  "version": "0.0.1",
-  "description": "",
+  "name": "product-service",
+  "version": "1.0.1",
+  "description": "Product service",
   "author": "",
   "private": true,
   "license": "UNLICENSED",
@@ -20,12 +20,14 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@nestjs/axios": "^3.0.2",
     "@nestjs/common": "^10.0.0",
     "@nestjs/config": "^3.2.0",
     "@nestjs/core": "^10.0.0",
     "@nestjs/mapped-types": "*",
     "@nestjs/mongoose": "^10.0.4",
     "@nestjs/platform-express": "^10.0.0",
+    "axios": "^1.6.8",
     "dotenv": "^16.4.5",
     "mongoose": "^8.2.2",
     "reflect-metadata": "^0.2.0",

@@ -1,6 +1,6 @@
-import { ItemRequestDto } from '../../../adapter/controller/dto/REST-request/item-request.dto';
 import { SaleRecord } from '../../../domain/sale-record';
+import { SaleRequestDto } from '../../../adapter/controller/dto/REST-request/sale-request.dto';
 
 export interface ProcessSaleCommand {
-  execute: (sale: ItemRequestDto[]) => Promise<SaleRecord>;
+  execute: (sale: SaleRequestDto) => Promise<SaleRecord>;
 }

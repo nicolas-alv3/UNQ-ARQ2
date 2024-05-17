@@ -98,6 +98,7 @@ export class ProductController {
       new ProductRestResponseDto(),
     );
   }
+
   @Delete(':id')
   async delete(@Param('id') id: string): Promise<string> {
     if (!id) {

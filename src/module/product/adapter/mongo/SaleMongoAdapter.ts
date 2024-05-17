@@ -17,7 +17,7 @@ export default class SaleMongoAdapter implements SaleRepository {
   }
 
   private mapSale(doc: any): SaleRecord {
-    return new SaleRecord(doc?.items.map(this.mapItem));
+    return new SaleRecord(doc?.items.map(this.mapItem), doc?.userId);
   }
 
   async findAll(): Promise<SaleRecord[]> {

@@ -42,6 +42,10 @@ export class Product {
     return this.stock;
   }
 
+  getSellerId() {
+    return this.sellerId;
+  }
+
   copy(): ProductRecord {
     return new ProductRecord(
       this.name,

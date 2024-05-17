@@ -1,3 +1,3 @@
-export interface ExternalSellerRepository {
-  existSellerById(id: string): Promise<boolean>;
+export interface ExternalUserRepository {
+  existUserById(id: string): Promise<boolean>;
 }

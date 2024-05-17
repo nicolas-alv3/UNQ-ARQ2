@@ -95,7 +95,7 @@ export default class ProductMongoAdapter implements ProductRepository {
 
     const result = await this.productModel.bulkWrite(updateOperations);
 
-    if (result && result.errors) {
+    if (result && result.hasWriteErrors()) {
       throw new BadRequestException('Invalid product data');
     }
 

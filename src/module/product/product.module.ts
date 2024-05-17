@@ -12,11 +12,15 @@ import { SaleController } from './adapter/controller/sale.controller';
 import { ProcessSaleUseCase } from './application/usecase/sale/process-sale-usecase.service';
 import SaleMongoAdapter from './adapter/mongo/SaleMongoAdapter';
 import { SaleSchema } from './adapter/mongo/sale.schema';
+import { HttpModule } from '@nestjs/axios';
+import ExternalSellerHTTPAdapter from './adapter/mongo/ExternalSellerHTTPAdapter';
+import ExternalUserHTTPAdapter from './adapter/mongo/ExternalUserHTTPAdapter';
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: 'Product', schema: ProductSchema }]),
     MongooseModule.forFeature([{ name: 'Sale', schema: SaleSchema }]),
+    HttpModule,
   ],
   controllers: [ProductController, SaleController],
   providers: [
@@ -51,6 +55,14 @@ import { SaleSchema } from './adapter/mongo/sale.schema';
     {
       provide: 'SaleRepository',
       useClass: SaleMongoAdapter,
+    },
+    {
+      provide: 'ExternalSellerRepository',
+      useClass: ExternalSellerHTTPAdapter,
+    },
+    {
+      provide: 'ExternalUserRepository',
+      useClass: ExternalUserHTTPAdapter,
     },
     ProductMongoAdapter,
   ],

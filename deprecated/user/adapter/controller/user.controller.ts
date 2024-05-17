@@ -8,7 +8,7 @@ import {
   Put,
 } from '@nestjs/common';
 import { CreateUserCommand } from '../../application/port/in/CreateUserCommand';
-import GenericMapper from '../../../utils/GenericMapper';
+import GenericMapper from '../../../../src/module/utils/GenericMapper';
 import { UserRequestDTO } from './dto/UserRequestDTO';
 import { UserRestResponseDto } from './dto/UserRestResponseDto';
 import { User } from '../../domain/User';
