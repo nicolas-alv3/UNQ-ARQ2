@@ -3,6 +3,8 @@ export interface ExternalUserRepository {
 }
 
 export interface UserData {
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
+  id: string;
 }

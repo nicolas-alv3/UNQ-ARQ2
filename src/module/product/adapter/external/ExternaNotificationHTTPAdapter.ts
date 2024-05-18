@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { ExternalSellerRepository } from '../../application/port/out/ExternalSellerRepository';
 import { HttpService } from '@nestjs/axios';
 import { NotificationDomainService } from '../../application/port/out/NotificationDomainService';
 import { SaleRecord } from '../../domain/sale-record';

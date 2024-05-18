@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { ExternalSellerRepository } from '../../application/port/out/ExternalSellerRepository';
 import { HttpService } from '@nestjs/axios';
 import {
   ExternalUserRepository,
@@ -8,16 +7,15 @@ import {
 
 @Injectable()
 export default class ExternalUserHTTPAdapter implements ExternalUserRepository {
-  private userServerURL = 'http://localhost:3001';
+  private userServerURL = 'http://localhost:8080';
   constructor(private readonly httpService: HttpService) {}
 
   getUserById(id: string): Promise<UserData> {
-    //return this.httpService.get(this.userServerURL + '/seller/id/' + id);
-    return new Promise((resolve) => {
-      resolve({
-        name: 'John Doe',
-        email: 'nicolas.alv3@gmail.com',
+    return this.httpService
+      .get(this.userServerURL + '/users/' + id)
+      .toPromise()
+      .then((res) => {
+        return res.data as UserData;
       });
-    });
   }
 }

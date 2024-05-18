@@ -6,11 +6,16 @@ import { HttpService } from '@nestjs/axios';
 export default class ExternalSellerHTTPAdapter
   implements ExternalSellerRepository
 {
-  private userServerURL = 'http://localhost:3001';
+  private userServerURL = 'http://localhost:8080';
   constructor(private readonly httpService: HttpService) {}
 
   existSellerById(id: string): Promise<boolean> {
-    //return this.httpService.get(this.userServerURL + '/seller/id/' + id);
+    // return this.httpService
+    //   .get(this.userServerURL + '/users/' + id)
+    //   .toPromise()
+    //   .then((res) => {
+    //     return res.data!;
+    //   });
     return new Promise((resolve) => {
       resolve(true);
     });

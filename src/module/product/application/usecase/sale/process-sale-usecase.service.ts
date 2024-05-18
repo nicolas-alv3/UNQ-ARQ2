@@ -47,7 +47,7 @@ export class ProcessSaleUseCase implements ProcessSaleCommand {
     );
     this.notificationDomainService
       .sendSaleNotification(record, userData)
-      .subscribe(() => console.log('Email sent successfully'));
+      .subscribe(console.log);
     await this.saleRepository.save(record);
     return record;
   }
