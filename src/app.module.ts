@@ -1,17 +1,25 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ProductModule } from './module/product/product.module';
-import { UserModule } from '../deprecated/user/user.module';
+import * as process from 'process';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
-    MongooseModule.forRoot(process.env.DB_CONNECTION as string),
+    MongooseModule.forRootAsync({
+      inject: [ConfigService],
+      imports: [ConfigModule],
+      useFactory: (config: ConfigService) => ({
+        uri: process.env.DB_CONNECTION,
+        dbName: config.get('NODE_ENV') === 'test' ? 'test2' : 'test',
+        autoIndex: false,
+      }),
+    }),
     ProductModule,
-    UserModule,
+    //UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],

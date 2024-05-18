@@ -28,7 +28,7 @@ export class CreateProductUseCase implements CreateProductCommand {
         throw new BadRequestException();
       }
     } catch (e) {
-      throw new ServiceUnavailableException();
+      throw new BadRequestException();
     }
   }
 }

@@ -10,14 +10,11 @@ export default class ExternalSellerHTTPAdapter
   constructor(private readonly httpService: HttpService) {}
 
   existSellerById(id: string): Promise<boolean> {
-    // return this.httpService
-    //   .get(this.userServerURL + '/users/' + id)
-    //   .toPromise()
-    //   .then((res) => {
-    //     return res.data!;
-    //   });
-    return new Promise((resolve) => {
-      resolve(true);
-    });
+    return this.httpService
+      .get(this.userServerURL + '/sellers/' + id)
+      .toPromise()
+      .then((res) => {
+        return !!res.data;
+      });
   }
 }
