@@ -3,21 +3,12 @@ import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from '../../src/app.module';
 import { ProductModule } from '../../src/module/product/product.module';
-import { Connection } from 'mongoose';
 import { getConnectionToken } from '@nestjs/mongoose';
-import axios from 'axios';
-
-const clearDatabase = async (connection) => {
-  const collections = connection.collections;
-  for (const key in collections) {
-    const collection = collections[key];
-    await collection.deleteMany({});
-  }
-};
+import { TestService } from '../test.service';
 
 describe('Products integration tests (e2e)', () => {
   let app: INestApplication;
-  let connection: Connection;
+  let connection;
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -27,11 +18,11 @@ describe('Products integration tests (e2e)', () => {
 
     app = moduleFixture.createNestApplication();
     await app.init();
-    await clearDatabase(connection);
+    await TestService.clearDatabase(connection);
   });
 
-  afterAll(() => {
-    app.close();
+  afterAll(async () => {
+    await app.close();
   });
 
   it('(GET) /products  works', () => {
@@ -40,31 +31,11 @@ describe('Products integration tests (e2e)', () => {
       .expect(200)
       .expect(({ body }) => {
         expect(body).toEqual([]);
-      })
-      .then((r) => console.log(r.body));
+      });
   });
 
-  async function createAuxSeller() {
-    // Crear un vendedor en la aplicación externa
-    const sellerData = {
-      email: 'test@mail.com',
-      businessName: 'test',
-    };
-
-    const response = await axios.post(
-      'http://localhost:8080/sellers',
-      sellerData,
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      },
-    );
-    return response.data.id;
-  }
-
   it('should create a product', async () => {
-    const sellerId = await createAuxSeller();
+    const sellerId = await TestService.createAuxSeller();
     const productData = {
       name: 'Celular 3',
       price: 2000,
