@@ -33,29 +33,38 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
-## Test
+## Unit Test
 
 ```bash
 # unit tests
 $ npm run test
 
-# e2e tests
-$ npm run test:e2e
-
 # test coverage
 $ npm run test:cov
 ```
 
-## Support
+## Tests de integración
+Para correr los test de integración hay que seguir tres pasos.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+1- Correr el servicio de usuarios en modo test usando
+```bash
+$ cd "user service path"
+$ npm install
+$ npm run start:test
+```
 
-## Stay in touch
+Esto hará que los tests no provoquen datos basura en la DB productiva.
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+2- Correr el servicio de notificaciones usando
+```bash
+$ cd "notification path"
+$ npm install
+$ npm start
+```
 
-## License
-
-Nest is [MIT licensed](LICENSE).
+3- Correr los test de integración en product service usando
+```bash
+$ cd "product service path"
+$ npm install
+$ npm run test:e2e
+```
