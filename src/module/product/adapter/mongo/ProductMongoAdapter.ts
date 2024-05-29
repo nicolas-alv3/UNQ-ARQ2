@@ -59,7 +59,7 @@ export default class ProductMongoAdapter implements ProductRepository {
   }
 
   async update(product: Product): Promise<Product> {
-    await this.productModel.findByIdAndUpdate(product.getId(), product);
+    await this.productModel.findByIdAndUpdate(product['id'], product);
     /*if (result?.errors) {
       throw new BadRequestException('Invalid product data');
     }*/
